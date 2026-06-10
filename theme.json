@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "name": "线条小狗 · 小白",
+  "author": "159xiaojiu",
+  "version": "1.0.0",
+  "description": "原创线条风马尔济斯桌宠主题，灵感来自 Moonlab Studio 线条小狗 Maltese，适配 Clawd on Desk 与 Cursor Agent 状态联动",
+  "license": "Fan art / portfolio use only. Not affiliated with Moonlab Studio. Original SVG assets by 159xiaojiu.",
+
+  "viewBox": {
+    "x": -15,
+    "y": -25,
+    "width": 45,
+    "height": 45
+  },
+
+  "layout": {
+    "contentBox": { "x": -2, "y": -2, "width": 20, "height": 22 },
+    "centerX": 7.5,
+    "baselineY": 17,
+    "visibleHeightRatio": 0.58,
+    "baselineBottomRatio": 0.05
+  },
+
+  "eyeTracking": {
+    "enabled": true,
+    "states": ["idle"],
+    "eyeRatioX": 0.5,
+    "eyeRatioY": 0.42,
+    "maxOffset": 2.8,
+    "bodyScale": 0.3,
+    "shadowStretch": 0.14,
+    "shadowShift": 0.28,
+    "ids": {
+      "eyes": "eyes-js",
+      "body": "body-js",
+      "shadow": "shadow-js"
+    },
+    "shadowOrigin": "7.5px 15px"
+  },
+
+  "states": {
+    "idle": ["maltese-idle-follow.svg"],
+    "thinking": ["maltese-thinking.svg"],
+    "working": ["maltese-working.svg"],
+    "error": ["maltese-error.svg"],
+    "attention": ["maltese-happy.svg"],
+    "notification": ["maltese-notification.svg"],
+    "sleeping": ["maltese-sleeping.svg"],
+    "waking": ["maltese-waking.svg"]
+  },
+
+  "sleepSequence": {
+    "mode": "direct"
+  },
+
+  "workingTiers": [
+    { "minSessions": 1, "file": "maltese-working.svg" }
+  ],
+
+  "idleAnimations": [],
+
+  "timings": {
+    "mouseIdleTimeout": 20000,
+    "mouseSleepTimeout": 60000
+  },
+
+  "hitBoxes": {
+    "default": { "x": -1, "y": 2, "w": 17, "h": 15 },
+    "sleeping": { "x": -2, "y": 6, "w": 19, "h": 11 }
+  },
+
+  "reactions": {
+    "double": { "files": ["maltese-happy.svg"], "duration": 2500 }
+  },
+
+  "miniMode": {
+    "supported": false
+  },
+
+  "objectScale": {
+    "widthRatio": 2.0,
+    "heightRatio": 1.5,
+    "offsetX": -0.5,
+    "offsetY": -0.3
+  }
+}
