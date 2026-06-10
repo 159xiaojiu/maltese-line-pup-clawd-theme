@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>线条小狗 v3.2.0 预览</title>
+  <style>
+    body { font-family: system-ui, sans-serif; background: #f5f5f5; margin: 20px; color: #222; }
+    h1 { font-size: 1.3rem; }
+    .note { background: #fff8e6; border: 1px solid #f0d080; border-radius: 8px; padding: 12px; margin: 12px 0 20px; line-height: 1.6; font-size: 0.92rem; }
+    section { margin-bottom: 24px; }
+    h2 { font-size: 1rem; border-bottom: 1px solid #ddd; padding-bottom: 6px; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 12px; }
+    .card { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 10px; }
+    .name { font-size: 0.75rem; color: #666; margin-bottom: 6px; word-break: break-all; }
+    .pair { display: flex; gap: 8px; }
+    .cell { flex: 1; text-align: center; }
+    .cell span { font-size: 0.7rem; color: #888; display: block; margin-bottom: 4px; }
+    .checker {
+      height: 120px; display: flex; align-items: center; justify-content: center;
+      background-color: #fff;
+      background-image: linear-gradient(45deg,#ccc 25%,transparent 25%),linear-gradient(-45deg,#ccc 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#ccc 75%),linear-gradient(-45deg,transparent 75%,#ccc 75%);
+      background-size: 14px 14px; background-position: 0 0,0 7px,7px -7px,-7px 0;
+      border: 1px solid #e0e0e0; border-radius: 6px;
+    }
+    .light { height: 120px; display: flex; align-items: center; justify-content: center; background: #fff; border: 1px solid #e0e0e0; border-radius: 6px; }
+    img { max-width: 108px; max-height: 108px; object-fit: contain; }
+  </style>
+</head>
+<body>
+  <h1>线条小狗 v3.3.0 — 原始贴图（黑底）</h1>
+  <p class="note">已回退到 LINE/Tenor 原始文件：线条清晰、动图正常。黑底在浅色桌面可见；透明处理已暂停，需你确认满意后再做。</p>
+  <div id="root"></div>
+  <script>
+    const groups = {
+      "待机 idle（3）": ["maltese-idle-on-golden.gif","maltese-idle-breathe.gif","maltese-idle-shiver.gif"],
+      "思考 thinking（3）": ["maltese-thinking-shock.gif","maltese-thinking-dazed.gif","maltese-thinking-ellipsis.png"],
+      "工作 working（3 档）": ["maltese-working-duo.gif","maltese-working-play.gif","maltese-working-busy.gif"],
+      "杂耍 juggling（2 档）": ["maltese-juggle-play.gif","maltese-juggle-shock.gif"],
+      "开心 attention（15，已去重）": [
+        "maltese-happy-heart.gif","maltese-happy-jump.gif","maltese-happy-party.gif","maltese-happy-flower.gif",
+        "maltese-happy-sparkle.png","maltese-happy-dance.png","maltese-happy-tongue.png","maltese-happy-party2.gif",
+        "maltese-happy-heart2.gif","maltese-happy-thumbs.png","maltese-happy-flower-petal.gif","maltese-happy-flower-head.png",
+        "maltese-happy-peek.png","maltese-happy-picnic.png","maltese-happy-bee.png"
+      ],
+      "出错 / 通知 / 睡醒": ["maltese-error-sad.png","maltese-sad-pout.png","maltese-error-noway.png","maltese-notify-alert.gif","maltese-sleep-breathe.gif","maltese-wake-wave.gif"],
+      "待机小动作 idleAnimations（5）": ["maltese-idle-heart.gif","maltese-idle-peek.png","maltese-happy-flower-petal.gif","maltese-happy-peek.png","maltese-happy-cheer.gif"]
+    };
+    const root = document.getElementById("root");
+    for (const [title, files] of Object.entries(groups)) {
+      const sec = document.createElement("section");
+      sec.innerHTML = `<h2>${title}</h2>`;
+      const grid = document.createElement("div"); grid.className = "grid";
+      for (const f of files) {
+        const card = document.createElement("div"); card.className = "card";
+        card.innerHTML = `<div class="name">${f}</div><div class="pair">
+          <div class="cell"><span>原图</span><div class="light"><img src="assets/_opaque/${f}" /></div></div>
+          <div class="cell"><span>透明底</span><div class="checker"><img src="assets/${f}" /></div></div>
+        </div>`;
+        grid.appendChild(card);
+      }
+      sec.appendChild(grid); root.appendChild(sec);
+    }
+  </script>
+</body>
+</html>

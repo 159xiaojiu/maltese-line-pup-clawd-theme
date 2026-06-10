@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>线条小狗 · 小白 — 主题预览 v3.1.0</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: "Segoe UI", system-ui, sans-serif;
+      background: #1a1a1a;
+      color: #eee;
+      padding: 24px;
+    }
+    h1 { font-size: 1.5rem; margin: 0 0 8px; }
+    .meta { color: #aaa; font-size: 0.9rem; margin-bottom: 24px; line-height: 1.6; }
+    .meta code { background: #2a2a2a; padding: 2px 6px; border-radius: 4px; }
+    section { margin-bottom: 32px; }
+    h2 {
+      font-size: 1.1rem;
+      border-bottom: 1px solid #333;
+      padding-bottom: 8px;
+      margin-bottom: 16px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 16px;
+    }
+    .card {
+      background: #252525;
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 12px;
+      text-align: center;
+    }
+    .checker {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto;
+      border-radius: 4px;
+      background-color: #fff;
+      background-image:
+        linear-gradient(45deg, #ccc 25%, transparent 25%),
+        linear-gradient(-45deg, #ccc 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #ccc 75%),
+        linear-gradient(-45deg, transparent 75%, #ccc 75%);
+      background-size: 16px 16px;
+      background-position: 0 0, 0 8px, 8px -8px, -8px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .card img {
+      width: 120px;
+      height: 120px;
+      object-fit: contain;
+      image-rendering: auto;
+    }
+    .card .label { font-size: 0.75rem; color: #bbb; margin-top: 8px; word-break: break-all; }
+    .note {
+      background: #2d2a1f;
+      border: 1px solid #4a4528;
+      border-radius: 8px;
+      padding: 12px 16px;
+      font-size: 0.9rem;
+      color: #ddd;
+      margin-bottom: 24px;
+    }
+  </style>
+</head>
+<body>
+  <h1>线条小狗 · 小白 — Clawd 桌宠主题预览</h1>
+  <p class="meta">
+    版本 <strong>v3.1.2</strong>（轮廓保护透明底）· 共 42 张主题素材 · 路径：<code>C:\Users\23986\Desktop\maltese-line-pup-theme</code><br>
+    已安装到：<code>%APPDATA%\clawd-on-desk\themes\maltese-line-pup</code><br>
+    在 Clawd on Desk 中：<strong>设置 → 主题 → 线条小狗 · 小白</strong>
+  </p>
+  <div class="note">
+    灰白棋盘格 = 透明区域。v3.1.2 已保护轮廓黑线，只去掉外围黑底。敲键盘工作态尚未找到，working 暂用「双狗忙碌」代替。
+  </div>
+
+  <section>
+    <h2>待机 idle（随机 4 种 + 小动作）</h2>
+    <div class="grid" id="idle"></div>
+  </section>
+  <section>
+    <h2>思考 thinking</h2>
+    <div class="grid" id="thinking"></div>
+  </section>
+  <section>
+    <h2>工作 working（3 档强度）</h2>
+    <div class="grid" id="working"></div>
+  </section>
+  <section>
+    <h2>开心 attention（任务完成，随机 18 种）</h2>
+    <div class="grid" id="attention"></div>
+  </section>
+  <section>
+    <h2>出错 error</h2>
+    <div class="grid" id="error"></div>
+  </section>
+  <section>
+    <h2>通知 notification</h2>
+    <div class="grid" id="notification"></div>
+  </section>
+  <section>
+    <h2>睡觉 / 醒来 sleeping · waking</h2>
+    <div class="grid" id="sleep"></div>
+  </section>
+
+  <script>
+    const groups = {
+      idle: [
+        "maltese-idle-on-golden.gif", "maltese-idle-breathe.gif",
+        "maltese-idle-thumb.gif", "maltese-idle-shiver.gif",
+        "maltese-idle-party.gif", "maltese-idle-heart.gif", "maltese-idle-peek.png"
+      ],
+      thinking: [
+        "maltese-thinking-shock.gif", "maltese-thinking-dazed.gif", "maltese-thinking-ellipsis.png"
+      ],
+      working: [
+        "maltese-working-duo.gif", "maltese-working-play.gif", "maltese-working-busy.gif",
+        "maltese-juggle-shock.gif", "maltese-juggle-play.gif"
+      ],
+      attention: [
+        "maltese-happy-heart.gif", "maltese-happy-jump.gif", "maltese-happy-party.gif",
+        "maltese-happy-flower.gif", "maltese-happy-cuddle.gif", "maltese-happy-sparkle.png",
+        "maltese-happy-dance.png", "maltese-happy-tongue.png", "maltese-happy-cheer.gif",
+        "maltese-happy-run.gif", "maltese-happy-party2.gif", "maltese-happy-heart2.gif",
+        "maltese-happy-thumbs.png", "maltese-happy-flower-petal.gif", "maltese-happy-flower-head.png",
+        "maltese-happy-peek.png", "maltese-happy-picnic.png", "maltese-happy-bee.png"
+      ],
+      error: [
+        "maltese-error-sad.png", "maltese-error-drool.gif", "maltese-sad-pout.png", "maltese-error-noway.png"
+      ],
+      notification: ["maltese-notify-alert.gif", "maltese-notify-jump.gif"],
+      sleep: [
+        "maltese-sleep-breathe.gif", "maltese-wake-thumb.gif", "maltese-wake-wave.gif"
+      ]
+    };
+
+    for (const [id, files] of Object.entries(groups)) {
+      const el = document.getElementById(id);
+      for (const f of files) {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `<div class="checker"><img src="assets/${f}" alt="${f}" /></div><div class="label">${f}</div>`;
+        el.appendChild(card);
+      }
+    }
+  </script>
+</body>
+</html>

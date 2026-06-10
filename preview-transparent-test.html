@@ -1,0 +1,87 @@
+<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"/><title>透明处理预览</title>
+<style>
+body{font-family:"Microsoft YaHei",sans-serif;background:#0f172a;color:#e2e8f0;padding:20px}
+h1{font-size:1.2rem}.card{background:#1e293b;border-radius:12px;padding:14px;margin:14px 0}
+.row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.box{height:180px;display:flex;align-items:center;justify-content:center;border-radius:8px;border:1px solid #475569}
+.box img{max-width:100%;max-height:100%;object-fit:contain}
+.box.dark{background:#111}.box.light{background:repeating-conic-gradient(#ccc 0% 25%,#eee 0% 50%) 50%/14px 14px}
+.box.white{background:#fff}.label{font-size:.8rem;color:#94a3b8;margin-bottom:6px}
+.meta{font-size:.75rem;color:#64748b;margin-top:8px}
+</style></head><body>
+<h1>白底抠图 + disposal=2 全帧重编码 · 透明预览</h1>
+<p>请在三个背景下检查：线条是否清晰、有无重影、白底是否干净。</p>
+
+    <div class="card">
+      <h3>maltese-happy-cheer.gif</h3>
+      <div class="row">
+        <div><div class="label">原图（黑底）</div><div class="box dark"><img src="assets/_opaque/maltese-happy-cheer.gif" /></div></div>
+        <div><div class="label">透明（浅灰底）</div><div class="box light"><img src="assets/maltese-happy-cheer.gif" /></div></div>
+        <div><div class="label">透明（白底）</div><div class="box white"><img src="assets/maltese-happy-cheer.gif" /></div></div>
+      </div>
+      <div class="meta">8/8 帧 · 白底色键 + 全帧 disposal=2</div>
+    </div>
+    <div class="card">
+      <h3>maltese-happy-flower-petal.gif</h3>
+      <div class="row">
+        <div><div class="label">原图（黑底）</div><div class="box dark"><img src="assets/_opaque/maltese-happy-flower-petal.gif" /></div></div>
+        <div><div class="label">透明（浅灰底）</div><div class="box light"><img src="assets/maltese-happy-flower-petal.gif" /></div></div>
+        <div><div class="label">透明（白底）</div><div class="box white"><img src="assets/maltese-happy-flower-petal.gif" /></div></div>
+      </div>
+      <div class="meta">20/20 帧 · 白底色键 + 全帧 disposal=2</div>
+    </div>
+    <div class="card">
+      <h3>maltese-happy-flower.gif</h3>
+      <div class="row">
+        <div><div class="label">原图（黑底）</div><div class="box dark"><img src="assets/_opaque/maltese-happy-flower.gif" /></div></div>
+        <div><div class="label">透明（浅灰底）</div><div class="box light"><img src="assets/maltese-happy-flower.gif" /></div></div>
+        <div><div class="label">透明（白底）</div><div class="box white"><img src="assets/maltese-happy-flower.gif" /></div></div>
+      </div>
+      <div class="meta">12/12 帧 · 白底色键 + 全帧 disposal=2</div>
+    </div>
+    <div class="card">
+      <h3>maltese-happy-heart.gif</h3>
+      <div class="row">
+        <div><div class="label">原图（黑底）</div><div class="box dark"><img src="assets/_opaque/maltese-happy-heart.gif" /></div></div>
+        <div><div class="label">透明（浅灰底）</div><div class="box light"><img src="assets/maltese-happy-heart.gif" /></div></div>
+        <div><div class="label">透明（白底）</div><div class="box white"><img src="assets/maltese-happy-heart.gif" /></div></div>
+      </div>
+      <div class="meta">18/18 帧 · 白底色键 + 全帧 disposal=2</div>
+    </div>
+    <div class="card">
+      <h3>maltese-happy-heart2.gif</h3>
+      <div class="row">
+        <div><div class="label">原图（黑底）</div><div class="box dark"><img src="assets/_opaque/maltese-happy-heart2.gif" /></div></div>
+        <div><div class="label">透明（浅灰底）</div><div class="box light"><img src="assets/maltese-happy-heart2.gif" /></div></div>
+        <div><div class="label">透明（白底）</div><div class="box white"><img src="assets/maltese-happy-heart2.gif" /></div></div>
+      </div>
+      <div class="meta">16/16 帧 · 白底色键 + 全帧 disposal=2</div>
+    </div>
+    <div class="card">
+      <h3>maltese-happy-jump.gif</h3>
+      <div class="row">
+        <div><div class="label">原图（黑底）</div><div class="box dark"><img src="assets/_opaque/maltese-happy-jump.gif" /></div></div>
+        <div><div class="label">透明（浅灰底）</div><div class="box light"><img src="assets/maltese-happy-jump.gif" /></div></div>
+        <div><div class="label">透明（白底）</div><div class="box white"><img src="assets/maltese-happy-jump.gif" /></div></div>
+      </div>
+      <div class="meta">19/19 帧 · 白底色键 + 全帧 disposal=2</div>
+    </div>
+    <div class="card">
+      <h3>maltese-happy-party.gif</h3>
+      <div class="row">
+        <div><div class="label">原图（黑底）</div><div class="box dark"><img src="assets/_opaque/maltese-happy-party.gif" /></div></div>
+        <div><div class="label">透明（浅灰底）</div><div class="box light"><img src="assets/maltese-happy-party.gif" /></div></div>
+        <div><div class="label">透明（白底）</div><div class="box white"><img src="assets/maltese-happy-party.gif" /></div></div>
+      </div>
+      <div class="meta">18/18 帧 · 白底色键 + 全帧 disposal=2</div>
+    </div>
+    <div class="card">
+      <h3>maltese-happy-party2.gif</h3>
+      <div class="row">
+        <div><div class="label">原图（黑底）</div><div class="box dark"><img src="assets/_opaque/maltese-happy-party2.gif" /></div></div>
+        <div><div class="label">透明（浅灰底）</div><div class="box light"><img src="assets/maltese-happy-party2.gif" /></div></div>
+        <div><div class="label">透明（白底）</div><div class="box white"><img src="assets/maltese-happy-party2.gif" /></div></div>
+      </div>
+      <div class="meta">11/11 帧 · 白底色键 + 全帧 disposal=2</div>
+    </div>
+</body></html>

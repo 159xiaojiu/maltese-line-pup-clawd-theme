@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>线条小狗 · 动图筛选预览</title>
+  <style>
+    :root { --ok:#16a34a; --warn:#d97706; --bad:#dc2626; --bg:#0f172a; --card:#1e293b; --text:#e2e8f0; --muted:#94a3b8; }
+    * { box-sizing: border-box; }
+    body { margin:0; font-family:"Segoe UI","Microsoft YaHei",sans-serif; background:var(--bg); color:var(--text); line-height:1.5; }
+    header { position:sticky; top:0; z-index:10; background:rgba(15,23,42,.95); backdrop-filter:blur(8px); border-bottom:1px solid #334155; padding:16px 20px; }
+    h1 { margin:0 0 8px; font-size:1.25rem; }
+    .path { font-family:Consolas,monospace; background:#0b1220; border:2px solid #3b82f6; border-radius:8px; padding:10px 12px; color:#93c5fd; word-break:break-all; margin:8px 0 12px; }
+    .stats { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:12px; }
+    .pill { padding:4px 10px; border-radius:999px; font-size:.85rem; font-weight:600; }
+    .pill.ok { background:rgba(22,163,74,.2); color:#86efac; border:1px solid var(--ok); }
+    .pill.warn { background:rgba(217,119,6,.2); color:#fcd34d; border:1px solid var(--warn); }
+    .pill.bad { background:rgba(220,38,38,.2); color:#fca5a5; border:1px solid var(--bad); }
+    .filters { display:flex; flex-wrap:wrap; gap:8px; }
+    button { cursor:pointer; border:1px solid #475569; background:var(--card); color:var(--text); padding:6px 12px; border-radius:8px; }
+    button.active { border-color:#3b82f6; background:#1d4ed8; }
+    main { padding:16px 20px 40px; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:14px; }
+    .card { background:var(--card); border-radius:12px; overflow:hidden; border:2px solid transparent; transition:transform .15s; }
+    .card:hover { transform:translateY(-2px); }
+    .card.ok { border-color:var(--ok); box-shadow:0 0 0 1px rgba(22,163,74,.3); }
+    .card.warn { border-color:var(--warn); box-shadow:0 0 0 1px rgba(217,119,6,.3); }
+    .card.bad { border-color:var(--bad); box-shadow:0 0 0 1px rgba(220,38,38,.3); }
+    .thumb { height:180px; display:flex; align-items:center; justify-content:center; background:repeating-conic-gradient(#334155 0% 25%,#1e293b 0% 50%) 50%/16px 16px; position:relative; }
+    .thumb img { max-width:100%; max-height:100%; object-fit:contain; }
+    .badge { position:absolute; top:8px; left:8px; font-size:.72rem; font-weight:700; padding:3px 8px; border-radius:6px; color:#fff; }
+    .badge.ok { background:var(--ok); } .badge.warn { background:var(--warn); color:#111; } .badge.bad { background:var(--bad); }
+    .meta { padding:10px 12px 12px; }
+    .name { font-size:.78rem; word-break:break-all; color:#f8fafc; margin-bottom:6px; }
+    .note { font-size:.75rem; color:var(--muted); }
+    .legend { margin-top:10px; font-size:.85rem; color:var(--muted); }
+    .hidden { display:none !important; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>线条小狗 · 交接包动图筛选</h1>
+    <div class="path">C:\\Users\\23986\\Desktop\\maltese-line-pup-theme\\handoff-gifs-only</div>
+    <div class="stats" id="stats"></div>
+    <div class="filters" id="filters">
+      <button class="active" data-filter="all">全部 (69)</button>
+      <button data-filter="animated">✅ 真动图 GIF (69)</button>
+      <button data-filter="fake">⚠️ WebP 伪装 (0)</button>
+      <button data-filter="static">❌ 静态/损坏 (0)</button>
+      <button data-filter="theme">theme-* 主题用</button>
+      <button data-filter="line">line-* LINE 包</button>
+      <button data-filter="tenor">tenor-*</button>
+    </div>
+    <p class="legend">绿框 = 多帧真动图 · 橙框 = 扩展名 .gif 但实际 WebP · 红框 = 静态或损坏。请肉眼确认缩略图是否在动。</p>
+  </header>
+  <main><div class="grid" id="grid"></div></main>
+  <script>
+    const ITEMS = [
+      {"f":"line-17142161_Maltese_puppy_life__2x_gif_443337430_2x.gif","cat":"animated","frames":8,"note":"8 帧 · 320×300","size":15319},
+      {"f":"line-17142161_Maltese_puppy_life__2x_gif_443337443_2x.gif","cat":"animated","frames":16,"note":"16 帧 · 320×300","size":66605},
+      {"f":"line-17142161_Maltese_puppy_life_gif_443337438.gif","cat":"animated","frames":12,"note":"12 帧 · 160×150","size":10451},
+      {"f":"line-17142161_Maltese_puppy_life_gif_443337447.gif","cat":"animated","frames":14,"note":"14 帧 · 160×150","size":11693},
+      {"f":"line-21242047_Maltese_puppy_life2__2x_gif_542756342_2x.gif","cat":"animated","frames":18,"note":"18 帧 · 320×300","size":36674},
+      {"f":"line-21242047_Maltese_puppy_life2__2x_gif_542756355_2x.gif","cat":"animated","frames":19,"note":"19 帧 · 320×300","size":32643},
+      {"f":"line-21242047_Maltese_puppy_life2_gif_542756342.gif","cat":"animated","frames":18,"note":"18 帧 · 160×150","size":16892},
+      {"f":"line-21242047_Maltese_puppy_life2_gif_542756351.gif","cat":"animated","frames":14,"note":"14 帧 · 160×150","size":12753},
+      {"f":"line-22723957_Maltese_puppy_life5__2x_gif_579236472_2x.gif","cat":"animated","frames":12,"note":"12 帧 · 320×300","size":23862},
+      {"f":"line-22723957_Maltese_puppy_life5__2x_gif_579236477_2x.gif","cat":"animated","frames":13,"note":"13 帧 · 320×300","size":22288},
+      {"f":"line-22723957_Maltese_puppy_life5__2x_gif_579236482_2x.gif","cat":"animated","frames":17,"note":"17 帧 · 320×300","size":87941},
+      {"f":"line-22723957_Maltese_puppy_life5__2x_gif_579236488_2x.gif","cat":"animated","frames":7,"note":"7 帧 · 320×300","size":23406},
+      {"f":"line-22723957_Maltese_puppy_life5__2x_gif_579236489_2x.gif","cat":"animated","frames":16,"note":"16 帧 · 320×300","size":133827},
+      {"f":"line-22723957_Maltese_puppy_life5__2x_gif_579236493_2x.gif","cat":"animated","frames":7,"note":"7 帧 · 320×300","size":36093},
+      {"f":"line-22723957_Maltese_puppy_life5_gif_579236470.gif","cat":"animated","frames":19,"note":"19 帧 · 160×150","size":18980},
+      {"f":"line-22723957_Maltese_puppy_life5_gif_579236475.gif","cat":"animated","frames":12,"note":"12 帧 · 160×150","size":18687},
+      {"f":"line-22723957_Maltese_puppy_life5_gif_579236477.gif","cat":"animated","frames":13,"note":"13 帧 · 160×150","size":10658},
+      {"f":"line-22723957_Maltese_puppy_life5_gif_579236478.gif","cat":"animated","frames":19,"note":"19 帧 · 160×150","size":26199},
+      {"f":"line-22723957_Maltese_puppy_life5_gif_579236480.gif","cat":"animated","frames":10,"note":"10 帧 · 160×150","size":9427},
+      {"f":"line-22723957_Maltese_puppy_life5_gif_579236489.gif","cat":"animated","frames":16,"note":"16 帧 · 160×150","size":60157},
+      {"f":"line-22723957_Maltese_puppy_life5_gif_579236490.gif","cat":"animated","frames":10,"note":"10 帧 · 160×150","size":22780},
+      {"f":"line-30397660_Maltese_puppy_life7__2x_gif_768838745_2x.gif","cat":"animated","frames":8,"note":"8 帧 · 320×300","size":15949},
+      {"f":"line-30397660_Maltese_puppy_life7__2x_gif_768838753_2x.gif","cat":"animated","frames":16,"note":"16 帧 · 320×300","size":33623},
+      {"f":"line-30397660_Maltese_puppy_life7__2x_gif_768838754_2x.gif","cat":"animated","frames":11,"note":"11 帧 · 320×300","size":23076},
+      {"f":"line-30397660_Maltese_puppy_life7__2x_gif_768838755_2x.gif","cat":"animated","frames":5,"note":"5 帧 · 320×300","size":13249},
+      {"f":"line-30397660_Maltese_puppy_life7__2x_gif_768838756_2x.gif","cat":"animated","frames":20,"note":"20 帧 · 320×300","size":33252},
+      {"f":"line-30397660_Maltese_puppy_life7__2x_gif_768838757_2x.gif","cat":"animated","frames":18,"note":"18 帧 · 320×300","size":46358},
+      {"f":"line-30397660_Maltese_puppy_life7__2x_gif_768838760_2x.gif","cat":"animated","frames":19,"note":"19 帧 · 320×300","size":41118},
+      {"f":"line-30397660_Maltese_puppy_life7__2x_gif_768838761_2x.gif","cat":"animated","frames":14,"note":"14 帧 · 320×300","size":23372},
+      {"f":"line-30397660_Maltese_puppy_life7_gif_768838752.gif","cat":"animated","frames":10,"note":"10 帧 · 160×150","size":12211},
+      {"f":"line-30397660_Maltese_puppy_life7_gif_768838758.gif","cat":"animated","frames":20,"note":"20 帧 · 160×150","size":15964},
+      {"f":"line-30397660_Maltese_puppy_life7_gif_768838761.gif","cat":"animated","frames":14,"note":"14 帧 · 160×150","size":11926},
+      {"f":"line-30397660_Maltese_puppy_life7_gif_768838764.gif","cat":"animated","frames":7,"note":"7 帧 · 160×150","size":6691},
+      {"f":"line-30397660_Maltese_puppy_life7_gif_768838767.gif","cat":"animated","frames":17,"note":"17 帧 · 160×150","size":36663},
+      {"f":"line-30890_Maltese_puppy_life__2x_gif_691386755_2x.gif","cat":"animated","frames":18,"note":"18 帧 · 320×300","size":83450},
+      {"f":"line-30890_Maltese_puppy_life__2x_gif_691386772_2x.gif","cat":"animated","frames":15,"note":"15 帧 · 320×300","size":42824},
+      {"f":"line-30890_Maltese_puppy_life__2x_gif_691386773_2x.gif","cat":"animated","frames":12,"note":"12 帧 · 320×300","size":24569},
+      {"f":"line-30890_Maltese_puppy_life_gif_691386759.gif","cat":"animated","frames":20,"note":"20 帧 · 160×150","size":43418},
+      {"f":"line-30890_Maltese_puppy_life_gif_691386769.gif","cat":"animated","frames":10,"note":"10 帧 · 160×150","size":31358},
+      {"f":"line-30890_Maltese_puppy_life_gif_691386774.gif","cat":"animated","frames":17,"note":"17 帧 · 160×150","size":19986},
+      {"f":"line-33356256_Couple_doggy_10__maltese__gif_828263457.gif","cat":"animated","frames":20,"note":"20 帧 · 160×150","size":52200},
+      {"f":"line-33356256_Couple_doggy_10__maltese__gif_828263476.gif","cat":"animated","frames":15,"note":"15 帧 · 160×150","size":19071},
+      {"f":"tenor-flower.gif","cat":"animated","frames":12,"note":"12 帧 · 200×189","size":97420},
+      {"f":"tenor-laying.gif","cat":"animated","frames":17,"note":"17 帧 · 130×116","size":24520},
+      {"f":"tenor-sample_1.gif","cat":"animated","frames":19,"note":"19 帧 · 220×220","size":25410},
+      {"f":"tenor-sample_2.gif","cat":"animated","frames":12,"note":"12 帧 · 200×189","size":97420},
+      {"f":"tenor-thumb.gif","cat":"animated","frames":19,"note":"19 帧 · 220×220","size":25410},
+      {"f":"theme-maltese-happy-cheer.gif","cat":"animated","frames":8,"note":"8 帧 · 320×300","size":15949},
+      {"f":"theme-maltese-happy-flower-petal.gif","cat":"animated","frames":20,"note":"20 帧 · 160×150","size":52200},
+      {"f":"theme-maltese-happy-flower.gif","cat":"animated","frames":12,"note":"12 帧 · 200×189","size":97420},
+      {"f":"theme-maltese-happy-heart.gif","cat":"animated","frames":18,"note":"18 帧 · 160×150","size":16892},
+      {"f":"theme-maltese-happy-heart2.gif","cat":"animated","frames":16,"note":"16 帧 · 320×300","size":33623},
+      {"f":"theme-maltese-happy-jump.gif","cat":"animated","frames":19,"note":"19 帧 · 160×150","size":18980},
+      {"f":"theme-maltese-happy-party.gif","cat":"animated","frames":18,"note":"18 帧 · 320×300","size":83450},
+      {"f":"theme-maltese-happy-party2.gif","cat":"animated","frames":11,"note":"11 帧 · 320×300","size":23076},
+      {"f":"theme-maltese-idle-breathe.gif","cat":"animated","frames":14,"note":"14 帧 · 160×150","size":12753},
+      {"f":"theme-maltese-idle-heart.gif","cat":"animated","frames":15,"note":"15 帧 · 320×300","size":42824},
+      {"f":"theme-maltese-idle-on-golden.gif","cat":"animated","frames":17,"note":"17 帧 · 160×150","size":19986},
+      {"f":"theme-maltese-idle-shiver.gif","cat":"animated","frames":14,"note":"14 帧 · 160×150","size":11926},
+      {"f":"theme-maltese-juggle-play.gif","cat":"animated","frames":10,"note":"10 帧 · 160×150","size":31358},
+      {"f":"theme-maltese-juggle-shock.gif","cat":"animated","frames":15,"note":"15 帧 · 320×300","size":42824},
+      {"f":"theme-maltese-notify-alert.gif","cat":"animated","frames":12,"note":"12 帧 · 320×300","size":24569},
+      {"f":"theme-maltese-sleep-breathe.gif","cat":"animated","frames":14,"note":"14 帧 · 160×150","size":12753},
+      {"f":"theme-maltese-thinking-dazed.gif","cat":"animated","frames":19,"note":"19 帧 · 160×150","size":26199},
+      {"f":"theme-maltese-thinking-shock.gif","cat":"animated","frames":16,"note":"16 帧 · 160×150","size":60157},
+      {"f":"theme-maltese-wake-wave.gif","cat":"animated","frames":12,"note":"12 帧 · 320×300","size":23862},
+      {"f":"theme-maltese-working-busy.gif","cat":"animated","frames":20,"note":"20 帧 · 160×150","size":15964},
+      {"f":"theme-maltese-working-duo.gif","cat":"animated","frames":12,"note":"12 帧 · 160×150","size":18687},
+      {"f":"theme-maltese-working-play.gif","cat":"animated","frames":20,"note":"20 帧 · 160×150","size":43418}
+    ];
+    const BADGE = { animated:{cls:'ok',text:'✅ 动图'}, fake:{cls:'warn',text:'⚠️ WebP伪装'}, static:{cls:'bad',text:'❌ 静态'} };
+    const stats = document.getElementById('stats');
+    const grid = document.getElementById('grid');
+    const animated = ITEMS.filter(i => i.cat === 'animated').length;
+    const fake = ITEMS.filter(i => i.cat === 'fake').length;
+    const stat = ITEMS.filter(i => i.cat === 'static').length;
+    stats.innerHTML = '<span class="pill ok">真动图 GIF：'+animated+' 个</span><span class="pill warn">WebP 伪装：'+fake+' 个</span><span class="pill bad">静态/损坏：'+stat+' 个</span><span class="pill">合计：'+ITEMS.length+' 个</span>';
+    function prefix(f){ if(f.startsWith('theme-')) return 'theme'; if(f.startsWith('line-')) return 'line'; if(f.startsWith('tenor-')) return 'tenor'; return 'other'; }
+    ITEMS.forEach(item => {
+      const card = document.createElement('article');
+      card.className = 'card ' + (item.cat === 'animated' ? 'ok' : item.cat === 'fake' ? 'warn' : 'bad');
+      card.dataset.cat = item.cat; card.dataset.prefix = prefix(item.f);
+      const b = BADGE[item.cat];
+      card.innerHTML = '<div class="thumb"><span class="badge '+b.cls+'">'+b.text+'</span><img src="'+item.f+'" alt="'+item.f+'" loading="lazy" /></div><div class="meta"><div class="name">'+item.f+'</div><div class="note">'+item.note+'</div></div>';
+      grid.appendChild(card);
+    });
+    document.getElementById('filters').addEventListener('click', e => {
+      const btn = e.target.closest('button[data-filter]'); if (!btn) return;
+      document.querySelectorAll('#filters button').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const f = btn.dataset.filter;
+      document.querySelectorAll('.card').forEach(card => {
+        let show = f === 'all';
+        if (f === 'animated') show = card.dataset.cat === 'animated';
+        if (f === 'fake') show = card.dataset.cat === 'fake';
+        if (f === 'static') show = card.dataset.cat === 'static';
+        if (['theme','line','tenor'].includes(f)) show = card.dataset.prefix === f;
+        card.classList.toggle('hidden', !show);
+      });
+    });
+  </script>
+</body>
+</html>
