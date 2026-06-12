@@ -1,25 +1,30 @@
-# 推送到 GitHub（需用户明确同意后才执行）
-$ErrorActionPreference = "Stop"
-Set-Location (Split-Path -Parent $MyInvocation.MyCommand.Path)
+# Push current project to GitHub
+$ErrorActionPreference = 'Continue'
+Set-Location $PSScriptRoot
 
-$confirm = Read-Host "确认上传到 GitHub 吗？输入 yes 继续，其他任意键取消"
-if ($confirm -ne "yes") {
-    Write-Host "已取消，未上传。" -ForegroundColor Yellow
-    exit 0
-}
-
-if (-not (git remote get-url origin 2>$null)) {
-    Write-Host "尚未配置远程仓库。请先确认仓库地址，并由用户同意后再添加 origin。" -ForegroundColor Yellow
+if (-not (Test-Path .git)) {
+    Write-Host '[FAIL] This folder is not a Git project.'
     exit 1
 }
 
-git add -A
-$status = git status --porcelain
+$status = git status --porcelain 2>$null
 if (-not $status) {
-    Write-Host "没有需要提交的更改。" -ForegroundColor Yellow
+    Write-Host '[SKIP] No changes to save.'
     exit 0
 }
 
-git commit -m "update: maltese line pup theme"
-git push origin HEAD
-Write-Host "推送完成！" -ForegroundColor Green
+git add -A
+$stamp = Get-Date -Format 'yyyy-MM-dd HH:mm'
+git commit -m "Save checkpoint $stamp" 2>$null
+if ($LASTEXITCODE -ne 0) {
+    Write-Host '[FAIL] Commit failed.'
+    exit 1
+}
+
+$hash = git rev-parse --short HEAD
+git push 2>$null
+if ($LASTEXITCODE -eq 0) {
+    Write-Host "[OK] Saved and pushed: $hash"
+} else {
+    Write-Host "[LOCAL] Saved locally: $hash (push failed)"
+}
